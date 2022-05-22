@@ -16,8 +16,6 @@ int main(int argc, char* argv[])
     fmt::print("Fetching available tracks...\n");
     std::vector<int> track_ids = komoot_api.fetch_track_ids();
 
-    fmt::print("Available tracks: {}\n", track_ids.size());
-
     for (int id : track_ids)
         fmt::print("{}, ", id);
 

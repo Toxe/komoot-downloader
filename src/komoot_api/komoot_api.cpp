@@ -36,14 +36,23 @@ void KomootAPI::login(const std::string& email, const std::string& password)
 
 std::vector<int> KomootAPI::fetch_track_ids()
 {
-    const auto json = request(fmt::format("https://api.komoot.de/v007/users/{}/tours/", user_id_));
+    std::string url = fmt::format("https://api.komoot.de/v007/users/{}/tours/", user_id_);
+    std::vector<int> track_ids;
 
-    std::vector<int> ids;
+    while (true) {
+        const auto json = request(url);
 
-    for (auto data : json["_embedded"]["tours"]) {
-        int id = data["id"];
-        ids.push_back(id);
+        for (const auto& tour : json["_embedded"]["tours"]) {
+            track_ids.push_back(tour["id"]);
+        }
+
+        fmt::print("Fetched {} of {} tracks\n", track_ids.size(), json["page"]["totalElements"].get<int>());
+
+        if (!json["_links"].contains("next"))
+            break;
+
+        url = json["_links"]["next"]["href"];
     }
 
-    return ids;
+    return track_ids;
 }
