@@ -1,4 +1,4 @@
-#include <vector>
+#include <locale>
 
 #include "fmt/core.h"
 
@@ -7,6 +7,8 @@
 
 int main(int argc, char* argv[])
 {
+    std::locale::global(std::locale("en_US.UTF-8"));
+
     CommandLine cli(argc, argv);
     KomootAPI komoot_api;
 
@@ -14,10 +16,8 @@ int main(int argc, char* argv[])
     komoot_api.login(cli.email(), cli.password());
 
     fmt::print("Fetching available tracks...\n");
-    std::vector<int> track_ids = komoot_api.fetch_track_ids();
+    const auto tracks = komoot_api.fetch_tracks();
 
-    for (int id : track_ids)
-        fmt::print("{}, ", id);
-
-    fmt::print("\n");
+    for (const auto& track : tracks)
+        fmt::print("[{}] Track {}: {}\n", track.date, track.id, track.name);
 }

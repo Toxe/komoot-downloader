@@ -5,6 +5,7 @@ add_executable(
         command_line/command_line.hpp
         komoot_api/komoot_api.cpp
         komoot_api/komoot_api.hpp
+        komoot_api/track.hpp
 )
 
 set_target_properties(komoot_downloader PROPERTIES CXX_EXTENSIONS OFF)

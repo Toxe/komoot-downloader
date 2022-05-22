@@ -5,10 +5,12 @@
 
 #include "cpr/session.h"
 
+#include "track.hpp"
+
 class KomootAPI {
 public:
     void login(const std::string& email, const std::string& password);
-    [[nodiscard]] std::vector<int> fetch_track_ids();
+    [[nodiscard]] std::vector<Track> fetch_tracks();
 
 private:
     [[nodiscard]] auto request(const std::string& url, const std::string& auth_user, const std::string& auth_password);
