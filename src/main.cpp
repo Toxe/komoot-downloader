@@ -1,12 +1,25 @@
-#include "command_line/command_line.hpp"
+#include <vector>
 
 #include "fmt/core.h"
+
+#include "command_line/command_line.hpp"
+#include "komoot_api/komoot_api.hpp"
 
 int main(int argc, char* argv[])
 {
     CommandLine cli(argc, argv);
+    KomootAPI komoot_api;
 
-    fmt::print("directory: {}\n", cli.directory());
-    fmt::print("email: {}\n", cli.email());
-    fmt::print("password: {}\n", cli.password());
+    fmt::print("Logging in...\n");
+    komoot_api.login(cli.email(), cli.password());
+
+    fmt::print("Fetching available tracks...\n");
+    std::vector<int> track_ids = komoot_api.fetch_track_ids();
+
+    fmt::print("Available tracks: {}\n", track_ids.size());
+
+    for (int id : track_ids)
+        fmt::print("{}, ", id);
+
+    fmt::print("\n");
 }
