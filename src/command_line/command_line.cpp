@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <filesystem>
 #include <iostream>
+#include <optional>
 
 #include "CLI/App.hpp"
 #include "CLI/Config.hpp"
