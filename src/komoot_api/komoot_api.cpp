@@ -7,16 +7,28 @@
 #include "fmt/core.h"
 #include "nlohmann/json.hpp"
 
-void KomootAPI::login(const std::string& email, const std::string& password)
+auto KomootAPI::request(const std::string& url, const std::string& auth_user, const std::string& auth_password)
 {
-    session_.SetUrl(cpr::Url{fmt::format("https://api.komoot.de/v006/account/email/{}/", email)});
-    session_.SetAuth(cpr::Authentication{email, password});
+    session_.SetUrl(cpr::Url{url});
+    session_.SetAuth(cpr::Authentication{auth_user, auth_password});
     cpr::Response res = session_.Get();
 
-    const auto json = nlohmann::json::parse(res.text);
+    auto json = nlohmann::json::parse(res.text);
 
     if (res.status_code != 200)
-        throw std::runtime_error(fmt::format("login failed (code {}: {})", res.status_code, json["message"]));
+        throw std::runtime_error(fmt::format("request failed (code {}: {})", res.status_code, json["message"]));
+
+    return json;
+}
+
+auto KomootAPI::request(const std::string& url)
+{
+    return request(url, user_id_, access_token_);
+}
+
+void KomootAPI::login(const std::string& email, const std::string& password)
+{
+    const auto json = request(fmt::format("https://api.komoot.de/v006/account/email/{}/", email), email, password);
 
     user_id_ = json["username"];
     access_token_ = json["password"];
@@ -24,14 +36,7 @@ void KomootAPI::login(const std::string& email, const std::string& password)
 
 std::vector<int> KomootAPI::fetch_track_ids()
 {
-    session_.SetUrl(cpr::Url{fmt::format("https://api.komoot.de/v007/users/{}/tours/", user_id_)});
-    session_.SetAuth(cpr::Authentication{user_id_, access_token_});
-    cpr::Response res = session_.Get();
-
-    const auto json = nlohmann::json::parse(res.text);
-
-    if (res.status_code != 200)
-        throw std::runtime_error(fmt::format("request failed (code {}: {})", res.status_code, json["message"]));
+    const auto json = request(fmt::format("https://api.komoot.de/v007/users/{}/tours/", user_id_));
 
     std::vector<int> ids;
 
