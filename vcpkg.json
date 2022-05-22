@@ -12,8 +12,16 @@
             "version>=": "2.2.0"
         },
         {
+            "name": "cpr",
+            "version>=": "1.8.3"
+        },
+        {
             "name": "fmt",
             "version>=": "8.1.1#1"
+        },
+        {
+            "name": "nlohmann-json",
+            "version>=": "3.10.5#3"
         }
     ]
 }
