@@ -1,6 +1,8 @@
 add_executable(
         komoot_downloader
         main.cpp
+        command_line/command_line.cpp
+        command_line/command_line.hpp
 )
 
 set_target_properties(komoot_downloader PROPERTIES CXX_EXTENSIONS OFF)
