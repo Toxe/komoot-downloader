@@ -3,14 +3,14 @@
 #include "fmt/core.h"
 
 #include "command_line/command_line.hpp"
-#include "komoot_api/komoot_api.hpp"
+#include "komoot/api.hpp"
 
 int main(int argc, char* argv[])
 {
     std::locale::global(std::locale("en_US.UTF-8"));
 
-    CommandLine cli(argc, argv);
-    KomootAPI komoot_api;
+    komoot_downloader::CommandLine cli(argc, argv);
+    komoot_downloader::komoot::API komoot_api;
 
     fmt::print("Logging in...\n");
     komoot_api.login(cli.email(), cli.password());

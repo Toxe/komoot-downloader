@@ -7,7 +7,9 @@
 
 #include "track.hpp"
 
-class KomootAPI {
+namespace komoot_downloader::komoot {
+
+class API {
 public:
     void login(const std::string& email, const std::string& password);
     [[nodiscard]] std::vector<Track> fetch_tracks();
@@ -22,3 +24,5 @@ private:
 
     cpr::Session session_;
 };
+
+}  // namespace komoot_downloader::komoot

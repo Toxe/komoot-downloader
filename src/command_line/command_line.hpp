@@ -2,6 +2,8 @@
 
 #include <string>
 
+namespace komoot_downloader {
+
 class CommandLine {
 public:
     CommandLine(int argc, char* argv[]);
@@ -15,3 +17,5 @@ private:
     std::string password_;
     std::string directory_;
 };
+
+}  // namespace komoot_downloader

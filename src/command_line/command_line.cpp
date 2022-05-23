@@ -10,6 +10,8 @@
 #include "CLI/Formatter.hpp"
 #include "fmt/core.h"
 
+namespace komoot_downloader {
+
 [[noreturn]] void show_usage_and_exit(const CLI::App& app, const char* error_message = nullptr, const std::optional<CLI::ParseError>& error = {})
 {
     if (error_message)
@@ -51,3 +53,5 @@ CommandLine::CommandLine(int argc, char* argv[])
             show_usage_and_exit(app, "please enter a password", {});
     }
 }
+
+}  // namespace komoot_downloader

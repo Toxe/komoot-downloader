@@ -1,4 +1,4 @@
-#include "komoot_api.hpp"
+#include "api.hpp"
 
 #include <stdexcept>
 
@@ -6,7 +6,9 @@
 #include "fmt/core.h"
 #include "nlohmann/json.hpp"
 
-auto KomootAPI::request(const std::string& url, const std::string& auth_user, const std::string& auth_password)
+namespace komoot_downloader::komoot {
+
+auto API::request(const std::string& url, const std::string& auth_user, const std::string& auth_password)
 {
     session_.SetUrl(cpr::Url{url});
     session_.SetAuth(cpr::Authentication{auth_user, auth_password});
@@ -20,12 +22,12 @@ auto KomootAPI::request(const std::string& url, const std::string& auth_user, co
     return json;
 }
 
-auto KomootAPI::request(const std::string& url)
+auto API::request(const std::string& url)
 {
     return request(url, user_id_, access_token_);
 }
 
-void KomootAPI::login(const std::string& email, const std::string& password)
+void API::login(const std::string& email, const std::string& password)
 {
     const auto json = request(fmt::format("https://api.komoot.de/v006/account/email/{}/", email), email, password);
 
@@ -33,7 +35,7 @@ void KomootAPI::login(const std::string& email, const std::string& password)
     access_token_ = json["password"];
 }
 
-std::vector<Track> KomootAPI::fetch_tracks()
+std::vector<Track> API::fetch_tracks()
 {
     std::string url = fmt::format("https://api.komoot.de/v007/users/{}/tours/", user_id_);
     std::vector<Track> tracks;
@@ -55,3 +57,5 @@ std::vector<Track> KomootAPI::fetch_tracks()
 
     return tracks;
 }
+
+}  // namespace komoot_downloader::komoot
