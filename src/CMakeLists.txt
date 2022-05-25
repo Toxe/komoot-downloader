@@ -5,6 +5,8 @@ add_executable(
         command_line/command_line.hpp
         komoot/api.cpp
         komoot/api.hpp
+        komoot/connector.cpp
+        komoot/connector.hpp
         komoot/track.hpp
 )
 

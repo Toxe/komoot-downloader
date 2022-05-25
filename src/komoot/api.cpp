@@ -2,29 +2,25 @@
 
 #include <stdexcept>
 
-#include "cpr/cpr.h"
 #include "fmt/core.h"
-#include "nlohmann/json.hpp"
+
+#include "connector.hpp"
 
 namespace komoot_downloader::komoot {
 
-auto API::request(const std::string& url, const std::string& auth_user, const std::string& auth_password)
+API::API(Connector* connector)
+    : connector_(connector)
 {
-    session_.SetUrl(cpr::Url{url});
-    session_.SetAuth(cpr::Authentication{auth_user, auth_password});
-    cpr::Response res = session_.Get();
-
-    auto json = nlohmann::json::parse(res.text);
-
-    if (res.status_code != 200)
-        throw std::runtime_error(fmt::format("request failed (code {}: {})", res.status_code, json["message"]));
-
-    return json;
 }
 
-auto API::request(const std::string& url)
+nlohmann::json API::request(const std::string& url, const std::string& auth_user, const std::string& auth_password)
 {
-    return request(url, user_id_, access_token_);
+    auto res = connector_->request(url, auth_user, auth_password);
+
+    if (std::holds_alternative<RequestFailure>(res))
+        throw std::runtime_error(fmt::format("request failed (code {}: {})", std::get<RequestFailure>(res).status_code, std::get<RequestFailure>(res).error_message));
+
+    return std::get<RequestSuccess>(res).json;
 }
 
 void API::login(const std::string& email, const std::string& password)
@@ -41,7 +37,7 @@ std::vector<Track> API::fetch_tracks()
     std::vector<Track> tracks;
 
     while (true) {
-        const auto json = request(url);
+        const auto json = request(url, user_id_, access_token_);
 
         for (const auto& tour : json["_embedded"]["tours"]) {
             tracks.push_back(Track{tour["id"].get<int>(), tour["name"].get<std::string>(), tour["date"].get<std::string>()});
