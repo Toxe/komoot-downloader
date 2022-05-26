@@ -12,10 +12,15 @@ RequestResult Connector::request(const std::string& url, const std::string& auth
 
     auto json = nlohmann::json::parse(res.text);
 
-    if (res.status_code >= 200 && res.status_code <= 299)
+    if (request_was_succesful(res.status_code))
         return RequestSuccess{res.status_code, json};
     else
         return RequestFailure{res.status_code, json.contains("message") ? json["message"] : ""};
+}
+
+bool Connector::request_was_succesful(const int status_code) const
+{
+    return status_code >= 200 && status_code <= 299;
 }
 
 }  // namespace komoot_downloader::komoot

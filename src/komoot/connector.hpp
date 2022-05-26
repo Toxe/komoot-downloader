@@ -25,6 +25,9 @@ public:
     [[nodiscard]] RequestResult request(const std::string& url, const std::string& auth_user, const std::string& auth_password);
 
 private:
+    [[nodiscard]] bool request_was_succesful(int status_code) const;
+
+private:
     cpr::Session session_;
 };
 
