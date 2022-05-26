@@ -27,5 +27,5 @@ if (BUILD_TESTING)
     target_compile_options(komoot_downloader_tests PRIVATE ${SANITIZER_FLAGS} ${DEFAULT_COMPILER_OPTIONS_AND_WARNINGS})
     target_link_libraries(komoot_downloader_tests PRIVATE ${SANITIZER_FLAGS} Catch2::Catch2 Catch2::Catch2WithMain)
 
-    add_test(NAME komoot_downloader_tests COMMAND komoot_downloader_tests)
+    catch_discover_tests(komoot_downloader_tests)
 endif ()
