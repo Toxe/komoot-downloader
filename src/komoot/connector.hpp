@@ -1,9 +1,9 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <variant>
 
-#include "cpr/session.h"
 #include "nlohmann/json.hpp"
 
 namespace komoot_downloader::komoot {
@@ -22,15 +22,14 @@ using RequestResult = std::variant<RequestSuccess, RequestFailure>;
 
 class Connector {
 public:
-    virtual ~Connector() = default;
+    Connector();
+    virtual ~Connector();
 
     [[nodiscard]] virtual RequestResult request(const std::string& url, const std::string& auth_user, const std::string& auth_password);
 
 private:
-    [[nodiscard]] bool request_was_succesful(int status_code) const;
-
-private:
-    cpr::Session session_;
+    class Impl;
+    std::unique_ptr<Impl> pimpl_;
 };
 
 }  // namespace komoot_downloader::komoot
