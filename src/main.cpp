@@ -6,7 +6,7 @@
 #include "komoot/api.hpp"
 #include "komoot/connector.hpp"
 
-int main(int argc, char* argv[])
+int main(int argc, const char* argv[])
 {
     std::locale::global(std::locale("en_US.UTF-8"));
 

@@ -6,7 +6,7 @@ namespace komoot_downloader {
 
 class CommandLine {
 public:
-    CommandLine(int argc, char* argv[]);
+    CommandLine(int argc, const char* argv[]);
 
     [[nodiscard]] const std::string& email() const { return email_; }
     [[nodiscard]] const std::string& password() const { return password_; }

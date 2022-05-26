@@ -20,7 +20,7 @@ namespace komoot_downloader {
     std::exit(error ? app.exit(error.value()) : 0);
 }
 
-CommandLine::CommandLine(int argc, char* argv[])
+CommandLine::CommandLine(int argc, const char* argv[])
 {
     const char* const description = "Komoot Downloader";
 
