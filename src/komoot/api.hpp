@@ -1,10 +1,10 @@
 #pragma once
 
+#include <optional>
 #include <string>
 #include <vector>
 
-#include "nlohmann/json.hpp"
-
+#include "connector.hpp"
 #include "track.hpp"
 
 namespace komoot_downloader::komoot {
@@ -13,16 +13,16 @@ class Connector;
 
 class API {
 public:
-    explicit API(Connector* connector);
+    explicit API(Connector& connector);
 
-    void login(const std::string& email, const std::string& password);
-    [[nodiscard]] std::vector<Track> fetch_tracks();
-
-private:
-    [[nodiscard]] nlohmann::json request(const std::string& url, const std::string& auth_user, const std::string& auth_password);
+    [[nodiscard]] bool login(const std::string& email, const std::string& password);
+    [[nodiscard]] std::optional<std::vector<Track>> fetch_tracks();
 
 private:
-    Connector* connector_;
+    void show_error_message(const std::string& text, const RequestFailure& res) const;
+
+private:
+    Connector& connector_;
 
     std::string user_id_;
     std::string access_token_;

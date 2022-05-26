@@ -1,7 +1,5 @@
 #include <locale>
 
-#include <memory>
-
 #include "fmt/core.h"
 
 #include "command_line/command_line.hpp"
@@ -14,15 +12,21 @@ int main(int argc, char* argv[])
 
     komoot_downloader::CommandLine cli(argc, argv);
 
-    auto connector = std::make_unique<komoot_downloader::komoot::Connector>();
-    komoot_downloader::komoot::API komoot_api(connector.get());
+    komoot_downloader::komoot::Connector connector;
+    komoot_downloader::komoot::API komoot_api(connector);
 
     fmt::print("Logging in...\n");
-    komoot_api.login(cli.email(), cli.password());
+
+    if (!komoot_api.login(cli.email(), cli.password()))
+        return 1;
 
     fmt::print("Fetching available tracks...\n");
+
     const auto tracks = komoot_api.fetch_tracks();
 
-    for (const auto& track : tracks)
+    if (!tracks)
+        return 2;
+
+    for (const auto& track : tracks.value())
         fmt::print("[{}] Track {}: {}\n", track.date, track.id, track.name);
 }
