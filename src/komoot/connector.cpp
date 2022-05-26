@@ -9,7 +9,7 @@ public:
     [[nodiscard]] RequestResult request(const std::string& url, const std::string& auth_user, const std::string& auth_password);
 
 private:
-    [[nodiscard]] bool request_was_succesful(int status_code) const;
+    [[nodiscard]] bool request_was_succesful(const long status_code) const;
 
 private:
     cpr::Session session_;
@@ -29,7 +29,7 @@ RequestResult Connector::Impl::request(const std::string& url, const std::string
         return RequestFailure{res.status_code, json.value("message", "")};
 }
 
-bool Connector::Impl::request_was_succesful(const int status_code) const
+bool Connector::Impl::request_was_succesful(const long status_code) const
 {
     return status_code >= 200 && status_code <= 299;
 }

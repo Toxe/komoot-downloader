@@ -9,12 +9,12 @@
 namespace komoot_downloader::komoot {
 
 struct RequestSuccess {
-    int status_code;
+    long status_code;
     nlohmann::json json;
 };
 
 struct RequestFailure {
-    int status_code;
+    long status_code;
     std::string error_message;
 };
 
