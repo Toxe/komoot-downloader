@@ -8,14 +8,14 @@ RequestResult Connector::request(const std::string& url, const std::string& auth
 {
     session_.SetUrl(cpr::Url{url});
     session_.SetAuth(cpr::Authentication{auth_user, auth_password});
-    cpr::Response res = session_.Get();
+    const cpr::Response res = session_.Get();
 
     auto json = nlohmann::json::parse(res.text);
 
     if (request_was_succesful(res.status_code))
         return RequestSuccess{res.status_code, json};
     else
-        return RequestFailure{res.status_code, json.contains("message") ? json["message"] : ""};
+        return RequestFailure{res.status_code, json.value("message", "")};
 }
 
 bool Connector::request_was_succesful(const int status_code) const
