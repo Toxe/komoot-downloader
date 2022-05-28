@@ -17,6 +17,7 @@ public:
 
     [[nodiscard]] bool login(const std::string& email, const std::string& password);
     [[nodiscard]] std::optional<std::vector<Track>> fetch_tracks();
+    [[nodiscard]] bool download(const Track& track, const std::string& directory);
 
 private:
     void show_error_message(const std::string& text, const RequestFailure& res) const;

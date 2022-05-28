@@ -27,6 +27,9 @@ int main(int argc, const char* argv[])
     if (!tracks)
         return 2;
 
+    fmt::print("saving files in: {}\n", cli.directory());
+
     for (const auto& track : tracks.value())
-        fmt::print("[{}] Track {}: {}\n", track.date, track.id, track.name);
+        if (!komoot_api.download(track, cli.directory()))
+            break;
 }
