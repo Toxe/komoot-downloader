@@ -520,4 +520,58 @@ TEST_CASE("komoot::API fetch tracks")
     }
 }
 
+TEST_CASE("komoot::API download GPX files")
+{
+    const std::string downloaded_track_xml =
+        R"(<?xml version='1.0' encoding='UTF-8'?>
+<gpx version="1.1" creator="https://www.komoot.de" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  <metadata>
+    <name>Tour</name>
+    <author>
+      <link href="https://www.komoot.de">
+        <text>komoot</text>
+        <type>text/html</type>
+      </link>
+    </author>
+  </metadata>
+  <trk>
+    <name>Tour</name>
+    <trkseg>
+      <trkpt lat="51.420253" lon="9.648904">
+        <ele>121.390325</ele>
+        <time>2021-09-03T08:44:35.004Z</time>
+      </trkpt>
+      <trkpt lat="51.420397" lon="9.648587">
+        <ele>121.390325</ele>
+        <time>2021-09-03T08:45:10.999Z</time>
+      </trkpt>
+      <trkpt lat="51.420372" lon="9.648385">
+        <ele>121.390325</ele>
+        <time>2021-09-03T08:45:13.999Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>)";
+
+    const nlohmann::json json_login = {
+        {"username", "1234"},
+        {"password", "????"}};
+
+    SECTION("successful download")
+    {
+        fakeit::Mock<Connector> mock_connector;
+        fakeit::When(Method(mock_connector, request)).Return(RequestSuccess{200, json_login});
+        fakeit::When(Method(mock_connector, download)).Return(DownloadSuccess{200, downloaded_track_xml});
+
+        API api(mock_connector.get());
+
+        REQUIRE(api.login("test@example.com", "password"));
+
+        const Track track{1234, "Tour", "date"};
+        const std::string download_directory{"."};
+
+        REQUIRE(api.download(track, download_directory));
+    }
+}
+
 }  // namespace komoot_downloader::komoot
