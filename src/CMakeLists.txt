@@ -7,6 +7,7 @@ add_executable(
         komoot/api.hpp
         komoot/connector.cpp
         komoot/connector.hpp
+        komoot/track.cpp
         komoot/track.hpp
 )
 
@@ -27,7 +28,9 @@ if (BUILD_TESTING)
             komoot/api.test.cpp
             komoot/connector.cpp
             komoot/connector.hpp
+            komoot/track.cpp
             komoot/track.hpp
+            komoot/track.test.cpp
     )
 
     set_target_properties(komoot_downloader_tests PROPERTIES CXX_EXTENSIONS OFF)
