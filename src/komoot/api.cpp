@@ -6,6 +6,8 @@
 
 #include "fmt/core.h"
 
+#include "connector.hpp"
+
 namespace komoot_downloader::komoot {
 
 API::API(Connector& connector)
@@ -13,7 +15,7 @@ API::API(Connector& connector)
 {
 }
 
-void API::show_error_message(const std::string& text, const RequestFailure& res) const
+void show_error_message(const std::string& text, const RequestFailure& res)
 {
     if (res.error_message.empty())
         fmt::print("Error: {} (code: {})\n", text, res.status_code);
