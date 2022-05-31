@@ -18,7 +18,7 @@
 
 void login(komoot_downloader::komoot::API& komoot_api, const komoot_downloader::CommandLine& cli)
 {
-    fmt::print("Logging in...\n");
+    fmt::print("logging in...\n");
 
     if (!komoot_api.login(cli.email(), cli.password()))
         die(1, "login failed");
@@ -26,14 +26,14 @@ void login(komoot_downloader::komoot::API& komoot_api, const komoot_downloader::
 
 std::vector<komoot_downloader::komoot::Track> fetch_available_tracks(komoot_downloader::komoot::API& komoot_api)
 {
-    fmt::print("Fetching available tracks...\n");
+    fmt::print("fetching available tracks...\n");
 
     const auto tracks = komoot_api.fetch_tracks();
 
     if (!tracks)
         die(2, "unable to fetch available tracks");
 
-    fmt::print("Fetched {} tracks\n", tracks->size());
+    fmt::print("fetched {} tracks\n", tracks->size());
 
     return tracks.value();
 }
