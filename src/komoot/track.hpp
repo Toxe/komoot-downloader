@@ -1,6 +1,6 @@
 #pragma once
 
-#include <chrono>
+#include <ctime>
 #include <string>
 
 namespace komoot_downloader::komoot {
@@ -15,7 +15,7 @@ public:
 private:
     int id_;
     std::string name_;
-    std::chrono::year_month_day date_;
+    std::tm date_;
 };
 
 }  // namespace komoot_downloader::komoot
