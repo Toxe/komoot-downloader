@@ -24,7 +24,7 @@ void login(komoot_downloader::komoot::API& komoot_api, const komoot_downloader::
         die(1, "login failed");
 }
 
-std::vector<komoot_downloader::komoot::Track> fetch_available_tracks(komoot_downloader::komoot::API& komoot_api)
+[[nodiscard]] std::vector<komoot_downloader::komoot::Track> fetch_available_tracks(komoot_downloader::komoot::API& komoot_api)
 {
     fmt::print("fetching available tracks...\n");
 
@@ -36,6 +36,16 @@ std::vector<komoot_downloader::komoot::Track> fetch_available_tracks(komoot_down
     fmt::print("fetched {} tracks\n", tracks->size());
 
     return tracks.value();
+}
+
+void save_file(const std::filesystem::path& file_path, const std::string& file_content)
+{
+    std::ofstream out{file_path, std::ofstream::binary};
+
+    if (!out.is_open())
+        die(4, fmt::format("unable to save file: {}", file_path.string()));
+
+    out << file_content;
 }
 
 void download_tracks(komoot_downloader::komoot::API& komoot_api, const komoot_downloader::CommandLine& cli, const std::vector<komoot_downloader::komoot::Track>& tracks)
@@ -60,12 +70,7 @@ void download_tracks(komoot_downloader::komoot::API& komoot_api, const komoot_do
         if (!file_content)
             die(3, "download error");
 
-        std::ofstream out{file_path, std::ofstream::binary};
-
-        if (!out.is_open())
-            die(4, fmt::format("unable to save file: {}", file_path.string()));
-
-        out << file_content.value();
+        save_file(file_path, *file_content);
 
         ++num_downloaded;
     }
