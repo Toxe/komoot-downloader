@@ -8,9 +8,8 @@ TEST_CASE("komoot::Track")
 {
     SECTION("returns filename")
     {
-        Track track{12345678, "Tour", "2022-05-29"};
-
-        REQUIRE(track.filename() == "2022-05-29_12345678_Tour.gpx");
+        REQUIRE(Track{12345678, "Tour", "2022-10-20T10:38:24.001Z"}.filename() == "2022-10-20_12345678_Tour.gpx");
+        REQUIRE(Track{12345678, "Tour", "2022-01-01T10:38:24.001Z"}.filename() == "2022-01-01_12345678_Tour.gpx");
     }
 }
 
