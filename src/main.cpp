@@ -68,8 +68,6 @@ void download_tracks(komoot_downloader::komoot::API& komoot_api, const komoot_do
         out << file_content.value();
 
         ++num_downloaded;
-
-        break;
     }
 
     fmt::print("total files: {}\nfiles downloaded: {}\nalready downloaded: {}\n", num_downloaded + num_already_exist, num_downloaded, num_already_exist);
