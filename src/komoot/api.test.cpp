@@ -567,10 +567,24 @@ TEST_CASE("komoot::API download GPX files")
 
         REQUIRE(api.login("test@example.com", "password"));
 
-        const Track track{1234, "Tour", "date"};
-        const std::string download_directory{"."};
+        const Track track{1234, "Tour", "2022-05-21T10:38:24.001Z"};
 
-        REQUIRE(api.download(track, download_directory));
+        REQUIRE(api.download_track(track).has_value());
+    }
+
+    SECTION("failed download")
+    {
+        fakeit::Mock<Connector> mock_connector;
+        fakeit::When(Method(mock_connector, request)).Return(RequestSuccess{200, json_login});
+        fakeit::When(Method(mock_connector, download)).Return(DownloadFailure{404});
+
+        API api(mock_connector.get());
+
+        REQUIRE(api.login("test@example.com", "password"));
+
+        const Track track{1234, "Tour", "2022-05-21T10:38:24.001Z"};
+
+        REQUIRE(!api.download_track(track));
     }
 }
 

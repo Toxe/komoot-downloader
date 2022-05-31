@@ -1,7 +1,5 @@
 #include "api.hpp"
 
-#include <filesystem>
-#include <fstream>
 #include <stdexcept>
 
 #include "fmt/core.h"
@@ -77,38 +75,16 @@ std::optional<std::vector<Track>> API::fetch_tracks()
     return tracks;
 }
 
-bool API::download(const Track& track, const std::string& directory)
+std::optional<std::string> API::download_track(const Track& track)
 {
-    const std::string filename = fmt::format("{}.gpx", track.id);
-    const auto file_path = std::filesystem::path(directory) / filename;
-
-    fmt::print("downloading track {} \"{}\" --> {} ... ", track.id, track.name, file_path.string());
-
-    if (std::filesystem::exists(file_path)) {
-        fmt::print("already exists\n");
-        return true;
-    }
-
-    const auto res = connector_.download(fmt::format("https://api.komoot.de/v007/tours/{}", filename), user_id_, access_token_);
+    const auto res = connector_.download(fmt::format("https://api.komoot.de/v007/tours/{}.gpx", track.id()), user_id_, access_token_);
 
     if (std::holds_alternative<DownloadFailure>(res)) {
         show_error_message("Download error", RequestFailure{std::get<DownloadFailure>(res).status_code, ""});
-        return false;
+        return std::nullopt;
     }
 
-    std::ofstream out{file_path, std::ofstream::binary};
-
-    if (!out.is_open()) {
-        fmt::print("unable to open output file \"{}\"\n", file_path.string());
-        return false;
-    }
-
-    const DownloadSuccess download = std::get<DownloadSuccess>(res);
-
-    out << download.text;
-
-    fmt::print("OK\n");
-    return true;
+    return std::get<DownloadSuccess>(res).text;
 }
 
 }  // namespace komoot_downloader::komoot

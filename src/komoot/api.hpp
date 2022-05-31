@@ -16,7 +16,7 @@ public:
 
     [[nodiscard]] bool login(const std::string& email, const std::string& password);
     [[nodiscard]] std::optional<std::vector<Track>> fetch_tracks();
-    [[nodiscard]] bool download(const Track& track, const std::string& directory);
+    [[nodiscard]] std::optional<std::string> download_track(const Track& track);
 
 private:
     Connector& connector_;
