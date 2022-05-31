@@ -63,8 +63,6 @@ std::optional<std::vector<Track>> API::fetch_tracks()
         if (!json.contains("page") || !json["page"].contains("totalElements"))
             throw std::runtime_error("missing data in section: page");
 
-        fmt::print("Fetched {} of {} tracks\n", tracks.size(), json["page"]["totalElements"].get<int>());
-
         if (json.contains("_links") && json["_links"].contains("next") && json["_links"]["next"].contains("href")) {
             url = json["_links"]["next"]["href"];
         } else {
