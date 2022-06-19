@@ -38,7 +38,7 @@ jobs:
                   sudo apt-get install -y ninja-build clang-14 libc++-14-dev libc++abi-14-dev
             - run: /bin/bash .ci/install-vcpkg.sh
             - run: /bin/bash .ci/build-project.sh
-            - run: ctest --output-on-failure --test-dir build
+            - run: ASAN_OPTIONS=alloc_dealloc_mismatch=0 ctest --output-on-failure --test-dir build
 
     linux-clang-libstdcpp:
         name: Linux Clang (libstdc++)
