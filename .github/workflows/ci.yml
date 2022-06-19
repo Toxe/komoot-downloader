@@ -68,6 +68,7 @@ jobs:
             CXX: g++-12
         steps:
             - uses: actions/checkout@v3
+            - uses: lhotari/action-upterm@v1
             - run: brew install ninja gcc@12
             - run: /bin/bash .ci/install-vcpkg.sh
             - run: /bin/bash .ci/build-project.sh
